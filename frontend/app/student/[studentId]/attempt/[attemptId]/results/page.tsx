@@ -19,7 +19,7 @@ import {
   ListItemText,
   Divider,
 } from '@mui/material';
-import { ArrowBack, CheckCircle, Cancel, School } from '@mui/icons-material';
+import { ArrowBack, CheckCircle, Cancel, School, EmojiEvents, Star, AccessTime } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../../../../../../stores/authStore';
 import { attemptApi } from '../../../../../../lib/api';
@@ -164,60 +164,91 @@ export default function ResultsPage({ params }: ResultsPageProps) {
         ) : results ? (
           <Box>
             {/* Quiz Info */}
-            <Paper elevation={3} sx={{ p: 4, mb: 3 }}>
+            <Paper elevation={3} sx={{ p: 4, mb: 3, borderRadius: 3 }}>
               <Typography variant="h4" sx={{ mb: 2, fontWeight: 'bold' }}>
                 {results.quiz.name}
               </Typography>
-              <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-                Completed by {results.student.name}
-              </Typography>
-
-              {/* Score Summary */}
-              <Grid container spacing={3} sx={{ mb: 3 }}>
-                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                  <Card elevation={2}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                      <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-                        {results.score}%
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Final Score
-                      </Typography>
+              {/* Final Score Summary Cards */}
+              <Grid container spacing={2} sx={{ mb: 2 }}>
+                <Grid size={{ xs: 6, sm: 3 }}>
+                  <Card elevation={3} sx={{
+                    p: 1, minWidth: 0, borderRadius: 3,
+                    background: 'linear-gradient(135deg, #f8ffae 0%, #43c6ac 100%)',
+                    boxShadow: 3,
+                    color: 'primary.main',
+                  }}>
+                    <CardContent sx={{ textAlign: 'center', p: 1 }}>
+                      <Box sx={{
+                        display: 'inline-flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        background: 'rgba(255,255,255,0.85)',
+                        borderRadius: 2,
+                        px: 1.5,
+                        py: 0.5,
+                        boxShadow: 1,
+                      }}>
+                        <EmojiEvents sx={{ fontSize: 32, mb: 0.5, color: '#fbc02d' }} />
+                        <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 0.5, color: '#1a3c34' }}>
+                          {results.score.toFixed(2)}%
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: '#1a3c34', fontWeight: 600 }}>
+                          Final Score
+                        </Typography>
+                      </Box>
                     </CardContent>
                   </Card>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                  <Card elevation={2}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                      <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'success.main' }}>
+                <Grid size={{ xs: 6, sm: 3 }}>
+                  <Card elevation={3} sx={{
+                    p: 1, minWidth: 0, borderRadius: 3,
+                    background: 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)',
+                    boxShadow: 3,
+                    color: 'success.main',
+                  }}>
+                    <CardContent sx={{ textAlign: 'center', p: 1 }}>
+                      <CheckCircle sx={{ fontSize: 32, mb: 0.5, color: '#43a047' }} />
+                      <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 0.5 }}>
                         {results.correct_answers}/{results.total_questions}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Correct Answers
+                      <Typography variant="caption" color="text.secondary">
+                        Correct
                       </Typography>
                     </CardContent>
                   </Card>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                  <Card elevation={2}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                      <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'info.main' }}>
+                <Grid size={{ xs: 6, sm: 3 }}>
+                  <Card elevation={3} sx={{
+                    p: 1, minWidth: 0, borderRadius: 3,
+                    background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                    boxShadow: 3,
+                    color: 'info.main',
+                  }}>
+                    <CardContent sx={{ textAlign: 'center', p: 1 }}>
+                      <Star sx={{ fontSize: 32, mb: 0.5, color: '#ffd600' }} />
+                      <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 0.5 }}>
                         {results.total_points_earned}/{results.total_possible_points}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Points Earned
+                      <Typography variant="caption" color="text.secondary">
+                        Points
                       </Typography>
                     </CardContent>
                   </Card>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                  <Card elevation={2}>
-                    <CardContent sx={{ textAlign: 'center' }}>
-                      <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'warning.main' }}>
+                <Grid size={{ xs: 6, sm: 3 }}>
+                  <Card elevation={3} sx={{
+                    p: 1, minWidth: 0, borderRadius: 3,
+                    background: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
+                    boxShadow: 3,
+                    color: 'warning.main',
+                  }}>
+                    <CardContent sx={{ textAlign: 'center', p: 1 }}>
+                      <AccessTime sx={{ fontSize: 32, mb: 0.5, color: '#ffb300' }} />
+                      <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 0.5 }}>
                         {formatTime(results.time_taken)}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Time Taken
+                      <Typography variant="caption" color="text.secondary">
+                        Time
                       </Typography>
                     </CardContent>
                   </Card>
@@ -226,41 +257,41 @@ export default function ResultsPage({ params }: ResultsPageProps) {
             </Paper>
 
             {/* Detailed Results */}
-            <Paper elevation={3} sx={{ p: 4 }}>
-              <Typography variant="h6" sx={{ mb: 3, fontWeight: 'bold' }}>
+            <Paper elevation={2} sx={{ p: 4, borderRadius: 3, background: 'linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%)' }}>
+              <Typography variant="h6" sx={{ mb: 3, fontWeight: 'bold', color: '#006064' }}>
                 Question Details
               </Typography>
               <List>
                 {results.answers.map((answer, index) => (
-                  <Box key={index}>
-                    <ListItem sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+                  <Box key={index} sx={{ mb: 2, borderRadius: 2, background: answer.is_correct ? 'rgba(67, 214, 112, 0.10)' : 'rgba(255, 87, 108, 0.10)', p: 2 }}>
+                    <ListItem sx={{ flexDirection: 'column', alignItems: 'flex-start', p: 0 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', mb: 1 }}>
                         {answer.is_correct ? (
                           <CheckCircle sx={{ color: 'success.main', mr: 1 }} />
                         ) : (
                           <Cancel sx={{ color: 'error.main', mr: 1 }} />
                         )}
-                        <Typography variant="body1" sx={{ flex: 1 }}>
+                        <Typography variant="body1" sx={{ flex: 1, fontWeight: 500 }}>
                           {answer.question_text}
                         </Typography>
                         <Chip 
                           label={`${answer.points_earned} pts`} 
                           color={answer.is_correct ? 'success' : 'default'}
                           size="small"
+                          sx={{ fontWeight: 'bold', ml: 1 }}
                         />
                       </Box>
                       <Box sx={{ ml: 4, width: '100%' }}>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" color="text.primary">
                           <strong>Your answer:</strong> {answer.student_answer}
                         </Typography>
                         {!answer.is_correct && (
-                          <Typography variant="body2" color="success.main">
+                          <Typography variant="body2" color="text.secondary">
                             <strong>Correct answer:</strong> {answer.correct_answer}
                           </Typography>
                         )}
                       </Box>
                     </ListItem>
-                    {index < results.answers.length - 1 && <Divider />}
                   </Box>
                 ))}
               </List>
