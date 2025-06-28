@@ -28,7 +28,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <AuthLayout title="Join Quiz Wizard">
+    <AuthLayout title="Join Lizard Quizzard Wizard">
       <AuthForm type="register" onSubmit={handleRegister} />
     </AuthLayout>
   );

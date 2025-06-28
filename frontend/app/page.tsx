@@ -68,7 +68,7 @@ export default function Home() {
         >
           <School sx={{ fontSize: 80, color: 'primary.main', mb: 2 }} />
           <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700 }}>
-            Welcome to Quiz Wizard
+            Welcome to Lizard Quizzard Wizard
           </Typography>
           <Typography variant="h6" color="text.secondary" sx={{ mb: 4 }}>
             Master your subjects with interactive quizzes and real-time feedback

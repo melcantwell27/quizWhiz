@@ -367,7 +367,7 @@ Then create some test quizzes and questions.
 
 ## 📝 **Postman Collection Setup**
 
-1. Create a new collection called "Quiz Wizard API"
+1. Create a new collection called "Lizard Quizzard Wizard API"
 2. Set base URL variable: `{{base_url}}` = `http://localhost:8000`
 3. Use `{{base_url}}/api/...` for all URLs
 4. Save student_id and attempt_id as variables after each response

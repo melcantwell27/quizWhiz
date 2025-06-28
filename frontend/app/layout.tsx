@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Quiz Wizard - Interactive Learning Platform",
+  title: "Lizard Quizzard Wizard - Interactive Learning Platform",
   description: "Master your subjects with interactive quizzes and real-time feedback",
 };
 

@@ -28,7 +28,7 @@ export default function LoginPage() {
   };
 
   return (
-    <AuthLayout title="Login to Quiz Wizard">
+    <AuthLayout title="Login to Lizard Quizzard Wizard">
       <AuthForm type="login" onSubmit={handleLogin} />
     </AuthLayout>
   );

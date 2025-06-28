@@ -37,7 +37,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout, username }) 
           className="flex-grow cursor-pointer"
           onClick={handleHomeClick}
         >
-          Quiz Wizard
+          Lizard Quizzard Wizard
         </Typography>
         
         {isAuthenticated && (

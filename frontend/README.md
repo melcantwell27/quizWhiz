@@ -1,4 +1,4 @@
-# Quiz Wizard Frontend
+# Lizard Quizzard Wizard Frontend
 
 A Next.js 15 application with authentication and dashboard functionality.
 
@@ -39,7 +39,7 @@ app/
 
 ### Global Navbar
 - Shows when user is authenticated
-- Contains "Quiz Wizard" title and logout button
+- Contains "Lizard Quizzard Wizard" title and logout button
 - Automatically appears on all authenticated pages
 
 ### Student Dashboard
