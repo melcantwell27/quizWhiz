@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { use } from 'react';
 import {
   Box,
@@ -12,10 +12,13 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  Alert,
 } from '@mui/material';
 import { School, Quiz, Person } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../../../stores/authStore';
+import { QuizList } from '../../../components/quiz';
+import { quizApi } from '../../../lib/api';
 
 interface StudentDashboardProps {
   params: Promise<{
@@ -23,10 +26,21 @@ interface StudentDashboardProps {
   }>;
 }
 
+interface Quiz {
+  id: number;
+  name: string;
+  total_questions?: number;
+  total_points?: number;
+}
+
 export default function StudentDashboard({ params }: StudentDashboardProps) {
   const router = useRouter();
   const { student, isAuthenticated } = useAuthStore();
   const { studentId } = use(params);
+  
+  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Check if the student ID in URL matches the logged-in student
@@ -40,6 +54,38 @@ export default function StudentDashboard({ params }: StudentDashboardProps) {
       router.push('/');
     }
   }, [student, isAuthenticated, studentId, router]);
+
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const quizData = await quizApi.getQuizzes();
+        setQuizzes(quizData);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load quizzes');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (isAuthenticated && student) {
+      fetchQuizzes();
+    }
+  }, [isAuthenticated, student]);
+
+  const handleStartQuiz = async (quizId: number) => {
+    if (!student) return;
+    
+    try {
+      setIsLoading(true);
+      const attempt = await quizApi.createAttempt(quizId, student.id);
+      router.push(`/student/${studentId}/attempt/${attempt.id}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to start quiz');
+      setIsLoading(false);
+    }
+  };
 
   // Show loading while checking authentication
   if (!isAuthenticated || !student) {
@@ -96,39 +142,28 @@ export default function StudentDashboard({ params }: StudentDashboardProps) {
           </Box>
         </Paper>
 
+        {/* Error Alert */}
+        {error && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {error}
+          </Alert>
+        )}
+
         {/* Dashboard Content */}
         <Grid container spacing={3}>
-          {/* Quizzes Completed */}
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Card elevation={3}>
-              <CardContent sx={{ textAlign: 'center', py: 4 }}>
-                <School sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-                  0
-                </Typography>
-                <Typography variant="body1" color="text.secondary">
-                  Quizzes Completed
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
           {/* Available Quizzes */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12 }}>
             <Card elevation={3}>
               <CardContent>
                 <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold' }}>
                   Available Quizzes
                 </Typography>
-                <Box sx={{ textAlign: 'center', py: 4 }}>
-                  <Quiz sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
-                  <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
-                    No quizzes available yet
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Check back later for new quizzes!
-                  </Typography>
-                </Box>
+                <QuizList
+                  quizzes={quizzes}
+                  studentId={studentId}
+                  isLoading={isLoading}
+                  onStartQuiz={handleStartQuiz}
+                />
               </CardContent>
             </Card>
           </Grid>

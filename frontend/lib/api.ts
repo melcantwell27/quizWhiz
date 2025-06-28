@@ -56,4 +56,38 @@ export const authApi = {
   },
 };
 
+export const quizApi = {
+  getQuizzes: async (): Promise<any[]> => {
+    return apiRequest<any[]>('/quizzes/');
+  },
+
+  createAttempt: async (quizId: number, studentId: number): Promise<any> => {
+    return apiRequest<any>('/attempts/', {
+      method: 'POST',
+      body: JSON.stringify({ quiz_id: quizId, student_id: studentId }),
+    });
+  },
+};
+
+// Quiz Attempt API functions
+export const attemptApi = {
+  // Get current question for an attempt
+  getCurrentQuestion: async (attemptId: string) => {
+    return apiRequest<any>(`/attempts/${attemptId}/current_question/`);
+  },
+
+  // Submit an answer
+  submitAnswer: async (attemptId: string, data: { choice_id?: number; free_text_response?: string }) => {
+    return apiRequest<any>(`/attempts/${attemptId}/answer/`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // Get attempt results
+  getResults: async (attemptId: string) => {
+    return apiRequest<any>(`/attempts/${attemptId}/results/`);
+  },
+};
+
 export { ApiError }; 

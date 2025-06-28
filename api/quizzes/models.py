@@ -70,7 +70,7 @@ class Attempt(models.Model):
 
 # --- Answer Model ---
 class Answer(models.Model):
-    attempt = models.ForeignKey(Attempt, on_delete=models.CASCADE)
+    attempt = models.ForeignKey(Attempt, related_name='answers', on_delete=models.CASCADE)
     # Polymorphic question (can be MCQ or FTQ)
     question_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     question_id = models.PositiveIntegerField()
