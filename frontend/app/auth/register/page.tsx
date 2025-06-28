@@ -19,7 +19,7 @@ export default function RegisterPage() {
       login(result.student);
       
       // Immediately redirect to user dashboard after registration
-      router.push(`/${result.student.id}`);
+      router.push(`/student/${result.student.id}`);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Registration failed');
     } finally {

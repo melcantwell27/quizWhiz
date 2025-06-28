@@ -24,7 +24,7 @@ export default function Home() {
   useEffect(() => {
     // If user is authenticated, redirect to their dashboard
     if (isAuthenticated && student) {
-      router.push(`/${student.id}`);
+      router.push(`/student/${student.id}`);
     }
   }, [isAuthenticated, student, router]);
 

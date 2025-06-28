@@ -19,7 +19,7 @@ export default function LoginPage() {
       login(result.student);
       
       // Redirect to user dashboard
-      router.push(`/${result.student.id}`);
+      router.push(`/student/${result.student.id}`);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Login failed');
     } finally {
