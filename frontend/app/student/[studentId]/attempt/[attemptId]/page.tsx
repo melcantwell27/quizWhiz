@@ -43,7 +43,6 @@ export default function AttemptPage({ params }: AttemptPageProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
-  const [quizCompleted, setQuizCompleted] = useState(false);
 
   const fetchCurrentQuestion = async () => {
     try {
@@ -53,8 +52,9 @@ export default function AttemptPage({ params }: AttemptPageProps) {
       setCurrentQuestion(question);
     } catch (err: any) {
       if (err.status === 404) {
-        // Quiz is completed
-        setQuizCompleted(true);
+        // Quiz is completed - redirect to results page
+        router.push(`/student/${studentId}/attempt/${attemptId}/results`);
+        return;
       } else {
         setError(err.message || 'Failed to load question');
       }
@@ -70,22 +70,28 @@ export default function AttemptPage({ params }: AttemptPageProps) {
       
       await attemptApi.submitAnswer(attemptId, answer);
       
-      // Fetch the next question
-      await fetchCurrentQuestion();
-    } catch (err: any) {
-      if (err.status === 404) {
-        // Quiz is completed
-        setQuizCompleted(true);
-      } else {
-        setError(err.message || 'Failed to submit answer');
+      // Try to fetch the next question
+      try {
+        const question = await attemptApi.getCurrentQuestion(attemptId);
+        setCurrentQuestion(question);
+      } catch (err: any) {
+        if (err.status === 404 || (err.message && err.message.toLowerCase().includes('quiz already completed'))) {
+          // Quiz is completed - redirect to results page
+          router.push(`/student/${studentId}/attempt/${attemptId}/results`);
+          return;
+        } else {
+          throw err; // Re-throw other errors
+        }
       }
+    } catch (err: any) {
+      if (err.message && err.message.toLowerCase().includes('quiz already completed')) {
+        router.push(`/student/${studentId}/attempt/${attemptId}/results`);
+        return;
+      }
+      setError(err.message || 'Failed to submit answer');
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const handleViewResults = () => {
-    router.push(`/student/${studentId}/attempt/${attemptId}/results`);
   };
 
   useEffect(() => {
@@ -159,28 +165,6 @@ export default function AttemptPage({ params }: AttemptPageProps) {
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
             <CircularProgress />
           </Box>
-        ) : quizCompleted ? (
-          <Paper elevation={3} sx={{ p: 4, textAlign: 'center' }}>
-            <Typography variant="h5" sx={{ mb: 3 }}>
-              Quiz Completed! 🎉
-            </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-              You've answered all the questions. Ready to see your results?
-            </Typography>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={handleViewResults}
-              sx={{
-                background: 'linear-gradient(135deg, #43b649 0%, #1ecbe1 100%)',
-                '&:hover': {
-                  background: 'linear-gradient(135deg, #3aa142 0%, #1bb8cc 100%)',
-                },
-              }}
-            >
-              View Results
-            </Button>
-          </Paper>
         ) : currentQuestion ? (
           <QuizQuestion
             question={currentQuestion}
