@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { School, Quiz, Person } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '../../stores/authStore';
+import { useAuthStore } from '../../../stores/authStore';
 
 interface StudentDashboardProps {
   params: Promise<{

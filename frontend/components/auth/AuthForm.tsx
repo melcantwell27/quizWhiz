@@ -3,7 +3,7 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useAuthStore } from '../../../stores/authStore';
+import { useAuthStore } from '../../stores/authStore';
 
 interface AuthFormProps {
   type: 'login' | 'register';
@@ -16,7 +16,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    clearError(); // Clear any previous errors
+    clearError(); // 
     onSubmit({ email });
   };
 

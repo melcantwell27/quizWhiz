@@ -1,8 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import AuthLayout from '../../components/auth/AuthLayout';
-import AuthForm from '../../components/auth/AuthForm';
+import AuthLayout from '../../../components/auth/AuthLayout';
+import AuthForm from '../../../components/auth/AuthForm';
 import { useAuthStore } from '../../../stores/authStore';
 import { authApi } from '../../../lib/api';
 

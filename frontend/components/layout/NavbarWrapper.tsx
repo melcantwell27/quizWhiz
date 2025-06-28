@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { usePathname } from 'next/navigation';
-import { useAuthStore } from '../../../stores/authStore';
+import { useAuthStore } from '../../stores/authStore';
 import Navbar from './Navbar';
 
 const NavbarWrapper: React.FC = () => {
