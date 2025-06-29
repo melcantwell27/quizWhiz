@@ -1,3 +1,4 @@
+# type: ignore
 from django.shortcuts import render
 from rest_framework import viewsets, status, serializers
 from rest_framework.decorators import action

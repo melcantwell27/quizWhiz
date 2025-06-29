@@ -12,8 +12,8 @@ class Quiz(models.Model):
     @property
     def total_points(self):
         """Calculates the total points for all questions in the quiz."""
-        mcq_points = self.mcqs.aggregate(total=models.Sum('points'))['total'] or 0
-        ftq_points = self.ftqs.aggregate(total=models.Sum('points'))['total'] or 0
+        mcq_points = self.mcqs.aggregate(total=models.Sum('points'))['total'] or 0  # type: ignore
+        ftq_points = self.ftqs.aggregate(total=models.Sum('points'))['total'] or 0  # type: ignore
         return mcq_points + ftq_points
 
 # --- Student Model ---
@@ -37,7 +37,7 @@ class FTQ(models.Model):
 class MCQ(models.Model):
     quiz = models.ForeignKey(Quiz, related_name='mcqs', on_delete=models.CASCADE, null=True)
     question = models.TextField()
-    points = models.PositiveIntegerField(default=5)
+    points = models.PositiveIntegerField(default=5)  # type: ignore
 
     def __str__(self):
         return self.question
@@ -46,7 +46,7 @@ class MCQ(models.Model):
 class Choice(models.Model):
     content = models.CharField(max_length=255)
     mcq = models.ForeignKey(MCQ, related_name='choices', on_delete=models.CASCADE)
-    is_correct = models.BooleanField(default=False)
+    is_correct = models.BooleanField(default=False)  # type: ignore
 
     def __str__(self):
         return self.content
