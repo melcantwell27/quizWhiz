@@ -10,9 +10,10 @@ interface NavbarProps {
   isAuthenticated: boolean;
   onLogout: () => void;
   username?: string;
+  studentId?: string;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout, username }) => {
+const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout, username, studentId }) => {
   const router = useRouter();
 
   const handleLogout = () => {
@@ -21,18 +22,18 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout, username }) 
   };
 
   const handleHomeClick = () => {
-    if (isAuthenticated && username) {
-      router.push(`/${username}`);
+    if (isAuthenticated) {
+      router.push(`/student/${studentId}`);
     } else {
       router.push('/');
     }
   };
 
   return (
-    <AppBar position="static" className="bg-green-700">
+    <AppBar position="static">
       <Toolbar>
         <Typography 
-          variant="h6" 
+          variant="h5" 
           component="div" 
           className="flex-grow cursor-pointer"
           onClick={handleHomeClick}
@@ -42,13 +43,10 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout, username }) 
         
         {isAuthenticated && (
           <Box className="flex items-center gap-4">
-            <Typography variant="body2" className="text-green-100">
-              Welcome, {username || 'User'}!
-            </Typography>
             <Button 
               color="inherit" 
               onClick={handleLogout}
-              className="text-green-100 hover:text-white"
+              className="text-white hover:text-white"
             >
               Logout
             </Button>

@@ -17,7 +17,7 @@ interface ResultsQuestionDetailsProps {
 }
 
 const ResultsQuestionDetails: React.FC<ResultsQuestionDetailsProps> = ({ answers }) => (
-  <Paper elevation={2} sx={{ p: 4, borderRadius: 3, background: 'linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%)' }}>
+  <Paper elevation={2} sx={{ p: 4, borderRadius: 3 }}>
     <Typography variant="h6" sx={{ mb: 3, fontWeight: 'bold', color: '#006064' }}>
       Question Details
     </Typography>

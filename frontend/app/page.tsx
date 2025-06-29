@@ -9,11 +9,8 @@ import {
   Paper,
   Avatar,
   Grid,
-  Card,
-  CardContent,
-  CardActions,
 } from '@mui/material';
-import { School, Quiz, Person } from '@mui/icons-material';
+import { School, Quiz } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../stores/authStore';
 
@@ -66,12 +63,12 @@ export default function Home() {
             borderRadius: 3,
           }}
         >
-          <School sx={{ fontSize: 80, color: 'primary.main', mb: 2 }} />
+          <Quiz sx={{ fontSize: 80, color: 'primary.main', mb: 2 }} />
           <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700 }}>
-            Welcome to Lizard Quizzard Wizard
+          Lizard Quizzard Wizard
           </Typography>
           <Typography variant="h6" color="text.secondary" sx={{ mb: 4 }}>
-            Master your subjects with interactive quizzes and real-time feedback
+            Where lizard wizards go to scale
           </Typography>
           
           <Grid container spacing={3} justifyContent="center">

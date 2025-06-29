@@ -1,8 +1,9 @@
 'use client';
 
-import { Card, CardContent, Grid, Typography, Box } from '@mui/material';
+import { CardContent, Grid, Typography, Box } from '@mui/material';
 import { EmojiEvents, CheckCircle, Star, AccessTime } from '@mui/icons-material';
 import React from 'react';
+import { ResultCard, ResultLabel } from './ResultsSummaryCards.styled';
 
 interface ResultsSummaryCardsProps {
   score: number;
@@ -25,87 +26,56 @@ const ResultsSummaryCards: React.FC<ResultsSummaryCardsProps> = ({
 }) => (
   <Grid container spacing={2} sx={{ mb: 2 }}>
     <Grid size={{ xs: 6, sm: 3 }}>
-      <Card elevation={3} sx={{
-        p: 1, minWidth: 0, borderRadius: 3,
-        background: 'linear-gradient(135deg, #f8ffae 0%, #43c6ac 100%)',
-        boxShadow: 3,
-        color: 'primary.main',
-      }}>
-        <CardContent sx={{ textAlign: 'center', p: 1 }}>
-          <Box sx={{
-            display: 'inline-flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            background: 'rgba(255,255,255,0.85)',
-            borderRadius: 2,
-            px: 1.5,
-            py: 0.5,
-            boxShadow: 1,
-          }}>
-            <EmojiEvents sx={{ fontSize: 32, mb: 0.5, color: '#fbc02d' }} />
-            <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 0.5, color: '#1a3c34' }}>
+      <ResultCard bgcolor="linear-gradient(135deg, #f8ffae 0%, #43c6ac 100%)">
+        <CardContent>
+          <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+            <ResultLabel variant="h5" sx={{ mb: 1 }}>Final Score</ResultLabel>
+            <EmojiEvents sx={{ fontSize: 32, color: 'primary.main', mb: 1 }} />
+            <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'text.primary' }}>
               {score.toFixed(2)}%
-            </Typography>
-            <Typography variant="caption" sx={{ color: '#1a3c34', fontWeight: 600 }}>
-              Final Score
             </Typography>
           </Box>
         </CardContent>
-      </Card>
+      </ResultCard>
     </Grid>
     <Grid size={{ xs: 6, sm: 3 }}>
-      <Card elevation={3} sx={{
-        p: 1, minWidth: 0, borderRadius: 3,
-        background: 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)',
-        boxShadow: 3,
-        color: 'success.main',
-      }}>
-        <CardContent sx={{ textAlign: 'center', p: 1 }}>
-          <CheckCircle sx={{ fontSize: 32, mb: 0.5, color: '#43a047' }} />
-          <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-            {correctAnswers}/{totalQuestions}
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            Correct
-          </Typography>
+      <ResultCard bgcolor="linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)">
+        <CardContent>
+          <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+            <ResultLabel variant="h5" sx={{ mb: 1 }}>Correct</ResultLabel>
+            <CheckCircle sx={{ fontSize: 32, color: 'success.main', mb: 1 }} />
+            <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'text.primary' }}>
+              {correctAnswers}/{totalQuestions}
+            </Typography>
+          </Box>
         </CardContent>
-      </Card>
+      </ResultCard>
     </Grid>
     <Grid size={{ xs: 6, sm: 3 }}>
-      <Card elevation={3} sx={{
-        p: 1, minWidth: 0, borderRadius: 3,
-        background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-        boxShadow: 3,
-        color: 'info.main',
-      }}>
-        <CardContent sx={{ textAlign: 'center', p: 1 }}>
-          <Star sx={{ fontSize: 32, mb: 0.5, color: '#ffd600' }} />
-          <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-            {totalPointsEarned}/{totalPossiblePoints}
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            Points
-          </Typography>
+      <ResultCard bgcolor="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)">
+        <CardContent>
+          <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+            <ResultLabel variant="h5" sx={{ mb: 1 }}>Points</ResultLabel>
+            <Star sx={{ fontSize: 32, color: 'warning.main', mb: 1 }} />
+            <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'text.primary' }}>
+              {totalPointsEarned}/{totalPossiblePoints}
+            </Typography>
+          </Box>
         </CardContent>
-      </Card>
+      </ResultCard>
     </Grid>
     <Grid size={{ xs: 6, sm: 3 }}>
-      <Card elevation={3} sx={{
-        p: 1, minWidth: 0, borderRadius: 3,
-        background: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
-        boxShadow: 3,
-        color: 'warning.main',
-      }}>
-        <CardContent sx={{ textAlign: 'center', p: 1 }}>
-          <AccessTime sx={{ fontSize: 32, mb: 0.5, color: '#ffb300' }} />
-          <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-            {formatTime(timeTaken)}
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            Time
-          </Typography>
+      <ResultCard bgcolor="linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)">
+        <CardContent>
+          <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+            <ResultLabel variant="h5" sx={{ mb: 1 }}>Time</ResultLabel>
+            <AccessTime sx={{ fontSize: 32, color: 'info.main', mb: 1 }} />
+            <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'text.primary' }}>
+              {formatTime(timeTaken)}
+            </Typography>
+          </Box>
         </CardContent>
-      </Card>
+      </ResultCard>
     </Grid>
   </Grid>
 );

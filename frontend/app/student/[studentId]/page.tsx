@@ -133,10 +133,10 @@ export default function StudentDashboard({ params }: StudentDashboardProps) {
             </Avatar>
             <Box>
               <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                Welcome back, {student.name}!
+              Welcome, {student.name}! 
               </Typography>
               <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                Ready to continue your learning journey?
+                Ready to scale your lizard knowledge?
               </Typography>
             </Box>
           </Box>
@@ -155,7 +155,7 @@ export default function StudentDashboard({ params }: StudentDashboardProps) {
           <Grid size={{ xs: 12 }}>
             <Card elevation={3}>
               <CardContent>
-                <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold' }}>
+                <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold', color: 'primary.main' }}>
                   Available Quizzes
                 </Typography>
                 <QuizList
