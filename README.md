@@ -1,6 +1,6 @@
-# Quiz Wizard
+# Lizard Quizzard Wizard
 
-**Quiz Wizard** is a web application for interactive quizzes with real-time feedback. Students can select quizzes, answer multiple-choice or free-text questions, and view detailed feedback upon submission.
+**Lizard Quizzard Wizard** is a web application for interactive quizzes with real-time feedback. Students can select quizzes, answer multiple-choice or free-text questions, and view detailed feedback upon submission.
 
 ## Features
 
