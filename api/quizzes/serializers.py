@@ -99,6 +99,7 @@ class CurrentQuestionSerializer(serializers.Serializer):
     choices = ChoiceQuizSerializer(many=True, required=False)
     question_number = serializers.IntegerField()
     total_questions = serializers.IntegerField()
+    quiz_id = serializers.IntegerField()
 
 class AttemptResultsSerializer(serializers.ModelSerializer):
     """Serializes detailed results for a completed attempt."""

@@ -13,12 +13,15 @@ import {
   CardContent,
   CircularProgress,
   Alert,
+  Button,
 } from '@mui/material';
 import { School, Quiz, Person } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../../../stores/authStore';
 import { QuizList } from '../../../components/quiz';
-import { quizApi } from '../../../lib/api';
+import { quizApi, attemptApi } from '../../../lib/api';
+import { saveInProgressQuiz } from '../../../lib/quizProgress';
+import { useInProgressQuiz } from '../../../hooks/useInProgressQuiz';
 
 interface StudentDashboardProps {
   params: Promise<{
@@ -41,6 +44,7 @@ export default function StudentDashboard({ params }: StudentDashboardProps) {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { quiz: inProgressQuiz, question: inProgressQuestion, attemptId: inProgressAttemptId, loading: inProgressLoading, error: inProgressError } = useInProgressQuiz(student?.id.toString() || '');
 
   useEffect(() => {
     // Check if the student ID in URL matches the logged-in student
@@ -80,6 +84,7 @@ export default function StudentDashboard({ params }: StudentDashboardProps) {
     try {
       setIsLoading(true);
       const attempt = await quizApi.createAttempt(quizId, student.id);
+      saveInProgressQuiz({ studentId: student.id.toString(), attemptId: attempt.id });
       router.push(`/student/${studentId}/attempt/${attempt.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to start quiz');
@@ -153,6 +158,37 @@ export default function StudentDashboard({ params }: StudentDashboardProps) {
         <Grid container spacing={3}>
           {/* Available Quizzes */}
           <Grid size={{ xs: 12 }}>
+                    {/* In Progress Quizzes Section */}
+        {(inProgressLoading || inProgressError || (inProgressQuiz && inProgressAttemptId)) && (
+          <Box sx={{ mb: 4 }}>
+            <Card elevation={3}>
+              <CardContent>
+                <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold', color: 'primary.main' }}>
+                  In Progress Quiz
+                </Typography>
+                
+                {inProgressLoading && (
+                  <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                    <CircularProgress />
+                  </Box>
+                )}
+                
+                {inProgressError && (
+                  <Alert severity="error">{inProgressError}</Alert>
+                )}
+                
+                {inProgressQuiz && inProgressAttemptId && !inProgressLoading && !inProgressError && (
+                  <QuizList
+                    quizzes={[inProgressQuiz]}
+                    studentId={studentId}
+                    isLoading={false}
+                    onStartQuiz={() => router.push(`/student/${studentId}/attempt/${inProgressAttemptId}`)}
+                  />
+                )}
+              </CardContent>
+            </Card>
+          </Box>
+        )}
             <Card elevation={3}>
               <CardContent>
                 <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold', color: 'primary.main' }}>

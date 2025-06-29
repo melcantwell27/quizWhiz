@@ -67,6 +67,10 @@ export const quizApi = {
       body: JSON.stringify({ quiz_id: quizId, student_id: studentId }),
     });
   },
+
+  getQuiz: async (quizId: number): Promise<any> => {
+    return apiRequest<any>(`/quizzes/${quizId}/`);
+  },
 };
 
 // Quiz Attempt API functions

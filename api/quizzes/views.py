@@ -138,7 +138,8 @@ class AttemptViewSet(viewsets.ModelViewSet):
             'question_text': current_question.question,
             'points': current_question.points,
             'question_number': question_number,
-            'total_questions': len(all_questions)
+            'total_questions': len(all_questions),
+            'quiz_id': attempt.quiz.id
         }
         
         # Add choices for MCQ
