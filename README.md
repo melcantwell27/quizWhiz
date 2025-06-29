@@ -2,6 +2,9 @@
 
 **Lizard Quizzard Wizard** is a web application for interactive quizzes with real-time feedback. Students can select quizzes, answer multiple-choice or free-text questions, and view detailed feedback upon submission.
 
+## Demo  
+Watch a demo of the application in action: [Loom Demo](https://www.loom.com/share/55935915486d40448ae9cc804684b1c1)
+
 ## Features
 
 ### 📚 Quiz Selection
@@ -34,6 +37,25 @@
 - **State Management**: Zustand with persistence middleware for lightweight and efficient state handling.
 
 ---
+
+### Installation
+
+Clone the repository:
+   ```bash
+   git clone https://github.com/your-repo/quiz-wizard.git
+
+Set up the backend:
+cd backend
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+
+Set up the frontend:
+cd ../frontend
+npm install
+npm run dev
+
+Access the app at http://localhost:3000.
 
 ## Design Decisions and Trade-offs
 
