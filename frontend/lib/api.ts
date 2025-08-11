@@ -80,6 +80,11 @@ export const attemptApi = {
     return apiRequest<any>(`/attempts/${attemptId}/current_question/`);
   },
 
+  // Get in-progress attempts for a specific student
+  getStudentAttempts: async (studentId: string) => {
+    return apiRequest<any[]>(`/students/${studentId}/in_progress_attempts/`);
+  },
+
   // Submit an answer
   submitAnswer: async (attemptId: string, data: { choice_id?: number; free_text_response?: string }) => {
     return apiRequest<any>(`/attempts/${attemptId}/answer/`, {

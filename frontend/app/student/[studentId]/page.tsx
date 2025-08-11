@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { use } from 'react';
 import {
   Box,
@@ -13,15 +13,12 @@ import {
   CardContent,
   CircularProgress,
   Alert,
-  Button,
 } from '@mui/material';
-import { School, Quiz, Person } from '@mui/icons-material';
+import { Person } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../../../stores/authStore';
+import { useQuizStore } from '../../../stores/quizStore';
 import { QuizList } from '../../../components/quiz';
-import { quizApi, attemptApi } from '../../../lib/api';
-import { saveInProgressQuiz } from '../../../lib/quizProgress';
-import { useInProgressQuiz } from '../../../hooks/useInProgressQuiz';
 
 interface StudentDashboardProps {
   params: Promise<{
@@ -29,22 +26,22 @@ interface StudentDashboardProps {
   }>;
 }
 
-interface Quiz {
-  id: number;
-  name: string;
-  total_questions?: number;
-  total_points?: number;
-}
-
 export default function StudentDashboard({ params }: StudentDashboardProps) {
   const router = useRouter();
   const { student, isAuthenticated } = useAuthStore();
   const { studentId } = use(params);
   
-  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const { quiz: inProgressQuiz, question: inProgressQuestion, attemptId: inProgressAttemptId, loading: inProgressLoading, error: inProgressError } = useInProgressQuiz(student?.id.toString() || '');
+  const {
+    inProgressQuizzes,
+    availableQuizzes,
+    loading,
+    error,
+    fetchInProgressQuizzes,
+    fetchAvailableQuizzes,
+    startQuiz,
+    resumeQuiz,
+    clearError
+  } = useQuizStore();
 
   useEffect(() => {
     // Check if the student ID in URL matches the logged-in student
@@ -60,35 +57,30 @@ export default function StudentDashboard({ params }: StudentDashboardProps) {
   }, [student, isAuthenticated, studentId, router]);
 
   useEffect(() => {
-    const fetchQuizzes = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const quizData = await quizApi.getQuizzes();
-        setQuizzes(quizData);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load quizzes');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     if (isAuthenticated && student) {
-      fetchQuizzes();
+      // Fetch both in-progress and available quizzes
+      fetchInProgressQuizzes(student.id.toString());
+      fetchAvailableQuizzes(student.id.toString());
     }
-  }, [isAuthenticated, student]);
+  }, [isAuthenticated, student, fetchInProgressQuizzes, fetchAvailableQuizzes]);
 
   const handleStartQuiz = async (quizId: number) => {
     if (!student) return;
     
     try {
-      setIsLoading(true);
-      const attempt = await quizApi.createAttempt(quizId, student.id);
-      saveInProgressQuiz({ studentId: student.id.toString(), attemptId: attempt.id });
-      router.push(`/student/${studentId}/attempt/${attempt.id}`);
+      const attemptId = await startQuiz(quizId, student.id.toString());
+      if (attemptId) {
+        router.push(`/student/${studentId}/attempt/${attemptId}`);
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to start quiz');
-      setIsLoading(false);
+      console.error('Failed to start quiz:', err);
+    }
+  };
+
+  const handleResumeQuiz = (quizId: number) => {
+    const attemptId = resumeQuiz(quizId);
+    if (attemptId) {
+      router.push(`/student/${studentId}/attempt/${attemptId}`);
     }
   };
 
@@ -149,7 +141,7 @@ export default function StudentDashboard({ params }: StudentDashboardProps) {
 
         {/* Error Alert */}
         {error && (
-          <Alert severity="error" sx={{ mb: 3 }}>
+          <Alert severity="error" sx={{ mb: 3 }} onClose={clearError}>
             {error}
           </Alert>
         )}
@@ -158,46 +150,44 @@ export default function StudentDashboard({ params }: StudentDashboardProps) {
         <Grid container spacing={3}>
           {/* Available Quizzes */}
           <Grid size={{ xs: 12 }}>
-                    {/* In Progress Quizzes Section */}
-        {(inProgressLoading || inProgressError || (inProgressQuiz && inProgressAttemptId)) && (
-          <Box sx={{ mb: 4 }}>
-            <Card elevation={3}>
-              <CardContent>
-                <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold', color: 'primary.main' }}>
-                  In Progress Quiz
-                </Typography>
-                
-                {inProgressLoading && (
-                  <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
-                    <CircularProgress />
-                  </Box>
-                )}
-                
-                {inProgressError && (
-                  <Alert severity="error">{inProgressError}</Alert>
-                )}
-                
-                {inProgressQuiz && inProgressAttemptId && !inProgressLoading && !inProgressError && (
-                  <QuizList
-                    quizzes={[inProgressQuiz]}
-                    studentId={studentId}
-                    isLoading={false}
-                    onStartQuiz={() => router.push(`/student/${studentId}/attempt/${inProgressAttemptId}`)}
-                  />
-                )}
-              </CardContent>
-            </Card>
-          </Box>
-        )}
+            {/* In Progress Quizzes Section */}
+            {(loading || (inProgressQuizzes && inProgressQuizzes.length > 0)) && (
+              <Box sx={{ mb: 4 }}>
+                <Card elevation={3}>
+                  <CardContent>
+                    <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold', color: 'primary.main' }}>
+                      In Progress Quizzes
+                    </Typography>
+                    
+                    {loading && (
+                      <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                        <CircularProgress />
+                      </Box>
+                    )}
+                    
+                    {inProgressQuizzes && inProgressQuizzes.length > 0 && !loading && (
+                      <QuizList
+                        quizzes={inProgressQuizzes}
+                        studentId={studentId}
+                        isLoading={false}
+                        isInProgress={true}
+                        onStartQuiz={handleResumeQuiz}
+                      />
+                    )}
+                  </CardContent>
+                </Card>
+              </Box>
+            )}
+            
             <Card elevation={3}>
               <CardContent>
                 <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold', color: 'primary.main' }}>
                   Available Quizzes
                 </Typography>
                 <QuizList
-                  quizzes={quizzes}
+                  quizzes={availableQuizzes}
                   studentId={studentId}
-                  isLoading={isLoading}
+                  isLoading={loading}
                   onStartQuiz={handleStartQuiz}
                 />
               </CardContent>

@@ -117,10 +117,10 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **kwargs):
-        self.stdout.write(self.style.SUCCESS('--- Starting Database Seed ---'))
+        self.stdout.write(self.style.SUCCESS('--- Starting Database Seed ---'))  # type: ignore
 
         # --- 1. Clean Slate using TRUNCATE ---
-        self.stdout.write(self.style.WARNING('DEV-ONLY: Clearing all quiz-related data using TRUNCATE...'))
+        self.stdout.write(self.style.WARNING('DEV-ONLY: Clearing all quiz-related data using TRUNCATE...'))  # type: ignore
         # This is the best practice for a development seed script.
         # It completely wipes the tables and RESETS the ID counter, ensuring a
         # clean and predictable state every time the seeder is run.
@@ -130,15 +130,15 @@ class Command(BaseCommand):
             # We must delete the "many" side of a relationship before the "one" side.
             cursor.execute("TRUNCATE TABLE quizzes_answer, quizzes_attempt, quizzes_choice, quizzes_mcq, quizzes_ftq, quizzes_quiz, quizzes_student RESTART IDENTITY CASCADE")
 
-        self.stdout.write(self.style.SUCCESS('Tables truncated and ID sequences reset.'))
+        self.stdout.write(self.style.SUCCESS('Tables truncated and ID sequences reset.'))  # type: ignore
         
         # --- 2. Create Students ---
         students = [
-            Student.objects.create(name='Leo Lizardi', email='leo@example.com'),
-            Student.objects.create(name='Sally Salamander', email='sally@example.com'),
-            Student.objects.create(name='Iggy Iguana', email='iggy@example.com'),
+            Student.objects.create(name='Leo Lizardi', email='leo@example.com'),  # type: ignore
+            Student.objects.create(name='Sally Salamander', email='sally@example.com'),  # type: ignore
+            Student.objects.create(name='Iggy Iguana', email='iggy@example.com'),  # type: ignore
         ]
-        self.stdout.write(self.style.SUCCESS(f'Created {len(students)} students.'))
+        self.stdout.write(self.style.SUCCESS(f'Created {len(students)} students.'))  # type: ignore
 
         # --- 3. Create Quizzes and Questions from QUIZ_DATA ---
         self.stdout.write('Creating new quizzes and questions...')
@@ -147,21 +147,21 @@ class Command(BaseCommand):
         num_ftqs = 0
 
         for quiz_data in QUIZ_DATA:
-            quiz = Quiz.objects.create(name=quiz_data['name'])
+            quiz = Quiz.objects.create(name=quiz_data['name'])  # type: ignore
             num_quizzes += 1
             for question_data in quiz_data['questions']:
                 if question_data['type'] == 'mcq':
-                    mcq = MCQ.objects.create(quiz=quiz, question=question_data['text'], points=question_data['points'])
+                    mcq = MCQ.objects.create(quiz=quiz, question=question_data['text'], points=question_data['points'])  # type: ignore
                     num_mcqs += 1
                     for choice_data in question_data['choices']:
-                        Choice.objects.create(mcq=mcq, content=choice_data['text'], is_correct=choice_data['correct'])
+                        Choice.objects.create(mcq=mcq, content=choice_data['text'], is_correct=choice_data['correct'])  # type: ignore
                 elif question_data['type'] == 'ftq':
-                    FTQ.objects.create(quiz=quiz, question=question_data['text'], points=question_data['points'])
+                    FTQ.objects.create(quiz=quiz, question=question_data['text'], points=question_data['points'])  # type: ignore
                     num_ftqs += 1
         
-        self.stdout.write(self.style.SUCCESS(f'Successfully created {num_quizzes} quizzes.'))
-        self.stdout.write(self.style.SUCCESS(f'Successfully created {num_mcqs} multiple choice questions.'))
-        self.stdout.write(self.style.SUCCESS(f'Successfully created {num_ftqs} free text questions.'))
+        self.stdout.write(self.style.SUCCESS(f'Successfully created {num_quizzes} quizzes.'))  # type: ignore
+        self.stdout.write(self.style.SUCCESS(f'Successfully created {num_mcqs} multiple choice questions.'))  # type: ignore
+        self.stdout.write(self.style.SUCCESS(f'Successfully created {num_ftqs} free text questions.'))  # type: ignore
         
         # --- 4. Create Sample Attempts and Answers ---
         self.stdout.write('Creating sample attempts and answers...')

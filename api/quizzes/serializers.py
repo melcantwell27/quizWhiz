@@ -130,10 +130,10 @@ class AttemptResultsSerializer(serializers.ModelSerializer):
         total = 0
         for answer in obj.answers.filter(is_correct=True):
             if answer.question_type.model == 'mcq':
-                mcq = MCQ.objects.get(id=answer.question_id)
+                mcq = MCQ.objects.get(id=answer.question_id)  # type: ignore
                 total += mcq.points
             elif answer.question_type.model == 'ftq':
-                ftq = FTQ.objects.get(id=answer.question_id)
+                ftq = FTQ.objects.get(id=answer.question_id)  # type: ignore
                 total += ftq.points
         return total
     
@@ -157,15 +157,15 @@ class AttemptResultsSerializer(serializers.ModelSerializer):
             # Calculate points earned for this answer
             if answer.is_correct:
                 if answer.question_type.model == 'mcq':
-                    mcq = MCQ.objects.get(id=answer.question_id)
+                    mcq = MCQ.objects.get(id=answer.question_id)  # type: ignore
                     answer_data['points_earned'] = mcq.points
                 elif answer.question_type.model == 'ftq':
-                    ftq = FTQ.objects.get(id=answer.question_id)
+                    ftq = FTQ.objects.get(id=answer.question_id)  # type: ignore
                     answer_data['points_earned'] = ftq.points
             
             # Add correct answer information
             if answer.question_type.model == 'mcq':
-                mcq = MCQ.objects.get(id=answer.question_id)
+                mcq = MCQ.objects.get(id=answer.question_id)  # type: ignore
                 correct_choice = mcq.choices.filter(is_correct=True).first()
                 answer_data['correct_answer'] = correct_choice.content if correct_choice else None
                 answer_data['student_answer'] = answer.selected_choice.content if answer.selected_choice else None

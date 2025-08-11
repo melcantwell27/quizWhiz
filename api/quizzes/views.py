@@ -333,3 +333,20 @@ class StudentViewSet(viewsets.ModelViewSet):
                 {'error': 'Student not found. Please register first.'}, 
                 status=status.HTTP_404_NOT_FOUND
             )
+    
+    @action(detail=True, methods=['get'])
+    def in_progress_attempts(self, request, pk=None):
+        """Get only in-progress attempts for a specific student."""
+        try:
+            student = self.get_object()
+            in_progress_attempts = Attempt.objects.filter(
+                student=student, 
+                time_end__isnull=True
+            ).order_by('-time_start')
+            serializer = AttemptSerializer(in_progress_attempts, many=True)
+            return Response(serializer.data)
+        except Student.DoesNotExist:
+            return Response(
+                {'error': 'Student not found'}, 
+                status=status.HTTP_404_NOT_FOUND
+            )

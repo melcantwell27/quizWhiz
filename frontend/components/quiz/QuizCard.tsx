@@ -23,9 +23,10 @@ interface QuizCardProps {
   quiz: Quiz;
   studentId: string;
   onStartQuiz?: (quizId: number) => void;
+  isInProgress?: boolean;
 }
 
-const QuizCard: React.FC<QuizCardProps> = ({ quiz, studentId, onStartQuiz }) => {
+const QuizCard: React.FC<QuizCardProps> = ({ quiz, studentId, onStartQuiz, isInProgress = false }) => {
   const router = useRouter();
 
   const handleStartQuiz = async () => {
@@ -79,6 +80,15 @@ const QuizCard: React.FC<QuizCardProps> = ({ quiz, studentId, onStartQuiz }) => 
                 size="small"
               />
             )}
+            {isInProgress && (
+              <Chip
+                icon={<Timer />}
+                label="In Progress"
+                variant="filled"
+                color="warning"
+                size="small"
+              />
+            )}
           </Box>
         </Box>
       </Box>
@@ -94,7 +104,7 @@ const QuizCard: React.FC<QuizCardProps> = ({ quiz, studentId, onStartQuiz }) => 
           },
         }}
       >
-        Start
+        {isInProgress ? 'Resume' : 'Start'}
       </Button>
     </Card>
   );

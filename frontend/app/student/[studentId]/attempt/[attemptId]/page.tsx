@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../../../../../stores/authStore';
 import { QuizQuestion } from '../../../../../components/quiz';
 import { attemptApi } from '../../../../../lib/api';
-import { clearInProgressQuiz } from '../../../../../lib/quizProgress';
+
 
 interface AttemptPageProps {
   params: Promise<{
@@ -77,8 +77,7 @@ export default function AttemptPage({ params }: AttemptPageProps) {
         setCurrentQuestion(question);
       } catch (err: any) {
         if (err.status === 404 || (err.message && err.message.toLowerCase().includes('quiz already completed'))) {
-          // Quiz is completed - clear progress and redirect to results page
-          clearInProgressQuiz();
+          // Quiz is completed - redirect to results page
           router.push(`/student/${studentId}/attempt/${attemptId}/results`);
           return;
         } else {
@@ -87,7 +86,6 @@ export default function AttemptPage({ params }: AttemptPageProps) {
       }
     } catch (err: any) {
       if (err.message && err.message.toLowerCase().includes('quiz already completed')) {
-        clearInProgressQuiz();
         router.push(`/student/${studentId}/attempt/${attemptId}/results`);
         return;
       }

@@ -16,13 +16,15 @@ interface QuizListProps {
   studentId: string;
   isLoading?: boolean;
   onStartQuiz?: (quizId: number) => void;
+  isInProgress?: boolean;
 }
 
 const QuizList: React.FC<QuizListProps> = ({ 
   quizzes, 
   studentId, 
   isLoading = false,
-  onStartQuiz 
+  onStartQuiz,
+  isInProgress = false
 }) => {
   if (isLoading) {
     return (
@@ -53,6 +55,7 @@ const QuizList: React.FC<QuizListProps> = ({
           quiz={quiz}
           studentId={studentId}
           onStartQuiz={onStartQuiz}
+          isInProgress={isInProgress}
         />
       ))}
     </Box>
