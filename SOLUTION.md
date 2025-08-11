@@ -1,4 +1,4 @@
-# Solution
+# Solution / Trade-off Considerations
 Melanie Cantwell / mel.cantwell27@gmail.com
 
 Demo Link: https://www.loom.com/share/55935915486d40448ae9cc804684b1c1
@@ -188,6 +188,7 @@ cd frontend
 npm install
 npm run dev
 ```
+<<<<<<< HEAD
 
 # Feedback for Stepful
 
@@ -204,3 +205,5 @@ Not required, but we love learning about what you're passionate about, so if you
 In addition to writing code, I also write / record music. This is the most-online music I currently have up!
 
 https://open.spotify.com/album/21yqS2QcreXjCmfD9Aq6Xa?si=6XtCb7aITrmPmP40ppzOyg
+=======
+>>>>>>> 3a8dfddf518fc2b3d48cf907e777d0e426642310

@@ -17,7 +17,6 @@ import { useAuthStore } from '../../../../../stores/authStore';
 import { QuizQuestion } from '../../../../../components/quiz';
 import { attemptApi } from '../../../../../lib/api';
 
-
 interface AttemptPageProps {
   params: Promise<{
     studentId: string;
