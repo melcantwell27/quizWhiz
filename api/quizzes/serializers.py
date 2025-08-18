@@ -157,26 +157,15 @@ class AttemptResultsSerializer(serializers.ModelSerializer):
             # Calculate points earned for this answer
             if answer.is_correct:
                 if answer.question_type.model == 'mcq':
-<<<<<<< HEAD
                     mcq = MCQ.objects.get(id=answer.question_id)  # type: ignore
                     answer_data['points_earned'] = mcq.points
                 elif answer.question_type.model == 'ftq':
                     ftq = FTQ.objects.get(id=answer.question_id)  # type: ignore
-=======
-                    mcq = MCQ.objects.get(id=answer.question_id)
-                    answer_data['points_earned'] = mcq.points
-                elif answer.question_type.model == 'ftq':
-                    ftq = FTQ.objects.get(id=answer.question_id)
->>>>>>> 3a8dfddf518fc2b3d48cf907e777d0e426642310
                     answer_data['points_earned'] = ftq.points
             
             # Add correct answer information
             if answer.question_type.model == 'mcq':
-<<<<<<< HEAD
                 mcq = MCQ.objects.get(id=answer.question_id)  # type: ignore
-=======
-                mcq = MCQ.objects.get(id=answer.question_id)
->>>>>>> 3a8dfddf518fc2b3d48cf907e777d0e426642310
                 correct_choice = mcq.choices.filter(is_correct=True).first()
                 answer_data['correct_answer'] = correct_choice.content if correct_choice else None
                 answer_data['student_answer'] = answer.selected_choice.content if answer.selected_choice else None
