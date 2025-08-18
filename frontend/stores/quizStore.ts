@@ -89,13 +89,9 @@ export const useQuizStore = create<QuizState>()((set, get) => ({
   
   startQuiz: async (quizId: number, studentId: string) => {
     try {
-      set({ loading: true, error: null });
-      const attempt = await quizApi.createAttempt(quizId, parseInt(studentId));
-      
-      // Refresh the quiz lists after starting
-      await get().fetchInProgressQuizzes(studentId);
-      await get().fetchAvailableQuizzes(studentId);
-      
+      // set({ loading: true, error: null });
+      const attempt = await quizApi.createAttempt(quizId, parseInt(studentId));   
+         
       set({ loading: false });
       return attempt.id;
     } catch (err: any) {
