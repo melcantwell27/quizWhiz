@@ -3,7 +3,7 @@
 **Lizard Quizzard Wizard** is a web application for interactive quizzes with real-time feedback. Students can select quizzes, answer multiple-choice or free-text questions, and view detailed feedback upon submission.
 
 ## Demo  
-Watch a demo of the full-stack application in action: [Loom Demo](https://www.loom.com/share/55935915486d40448ae9cc804684b1c1)
+Watch a demo of the full-stack application in action: [Loom Demo](https://www.loom.com/share/34f8968d02b546abbaceee3c0f231b0e?sid=a07e96b6-6f6e-4d02-8961-99384001899a)
 
 ## Features
 
